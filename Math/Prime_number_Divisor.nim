@@ -1,8 +1,8 @@
 import atcoder/extra/math/eratosthenes
 
 let e=initEratosthenes(n)
-e.prime
 
+e.prime
 let p=initEratosthenes(n).prime.mapIt(it.int)
 
 e.factor(N)
