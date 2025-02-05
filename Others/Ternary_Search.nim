@@ -1,19 +1,25 @@
 #実数
+proc f(m:int):float=
 var
-  l=0.0
-  r=10.0^n
+  l=
+  r=
 while r-l>pow(10,-6.0):
   let
-    ml=(2*l+r)/3
-    mr=(l+2*r)/3
+    ml=(l*2+r)/3
+    mr=(l+r*2)/3
   if f(ml)>f(mr): l=ml
   else: r=mr
+echo f(r)
 
 #整数
-while r-l>1:
+proc f(m:int):float=
+var
+  l=
+  r=
+while r-l>2:
   let
     ml=(l*2+r) div 3
-    mr=(l+m*2) div 3
+    mr=(l+r*2) div 3
   if f(ml)>f(mr): l=ml
   else: r=mr
-for i in l..r: a.min=f(i)
+echo (l..r).toSeq.mapIt(f(it)).min
