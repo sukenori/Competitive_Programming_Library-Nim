@@ -1,3 +1,4 @@
+#グループ分け全列挙
 var s:HashSet[seq[seq[int]]]
 proc r(i:int,v:seq[seq[int]])=
   if i==N: s.incl(v); return

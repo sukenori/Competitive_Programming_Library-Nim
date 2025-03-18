@@ -12,8 +12,9 @@ d.size(i)
 
 d.groups
 
-var p=(0..<N).toSeq
-var r=newSeqWith(N,0)
+var
+  p=(0..<N).toSeq
+  r=newSeq[int](N)
 proc root(i:int):int=
   if p[i]==i: return i
   else: p[i]=root(p[i]); return p[i]

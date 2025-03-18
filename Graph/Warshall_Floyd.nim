@@ -1,5 +1,5 @@
 import atcoder/extra/graph/warshall_floyd
-var g=newSeqWith(N,newSeqWith(N,int.inf))
+var g=int.inf.repeat(N).repeat(N)
 for i in 0..<N: g[i][i]=0
 for _ in 1..M:
   let u,v=nextInt()-1

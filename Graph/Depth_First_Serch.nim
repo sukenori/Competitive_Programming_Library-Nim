@@ -1,4 +1,4 @@
-var d=newSeqWith(N,false)
+var d=false.repeat(N)
 proc dfs(i:int)=
   d[i]=true
   #行き preorder
@@ -6,4 +6,5 @@ proc dfs(i:int)=
     if not d[j.t]:
       dfs(j.t)
   #帰り postorder
-  #d[i]=false #これまでの探索で初めて／この探索で初めて
+  #d[i]=false #単純パス／この探索で初めて
+dfs(0)

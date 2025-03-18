@@ -1,8 +1,8 @@
 import heapqueue
 var
   q=[(w:0,i:0)].toHeapQueue
-  w=newSeqWith(N,int.inf)
-  d=newSeqWith(N,false)
+  w=int.inf.repeat(N)
+  d=false.repeat(N)
 w[0]=0
 while q.len>0:
   let i=q.pop

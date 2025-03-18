@@ -17,7 +17,7 @@ s[i]=x
 s[l..<r]
 
 var n=1; while n<N: n*=2
-var st=newSeqWith(2*n-1,int.inf)
+var st=int.inf.repeat(2*n-1)
 proc u(i,v:int)=
   var j=n-1+v; st[j]=v
   while j>0:
