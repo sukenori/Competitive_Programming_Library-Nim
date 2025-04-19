@@ -1,4 +1,4 @@
-var g=newSeqWith(N,newSeq[int]())
+var g=newSeq[seq[int]](N)
 for _ in 1..M:
   let u,v=nextInt()-1
   g[u].add(v); g[v].add(u)
