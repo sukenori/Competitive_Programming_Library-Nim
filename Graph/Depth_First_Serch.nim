@@ -8,3 +8,15 @@ proc dfs(i:int)=
   #帰り postorder
   #d[i]=false #単純パス／この探索で初めて
 dfs(0)
+
+import deques
+var
+  q=[0].toDeque
+  d=false.repeat(N)
+while q.len>0:
+  let i=q.popLast
+  if not d[i]:
+    d[i]=true
+    for j in g[i]:
+      if not d[j.t]:
+        q.addLast(j.t)

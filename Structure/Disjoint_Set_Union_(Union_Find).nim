@@ -14,23 +14,24 @@ d.groups
 
 var
   p=(0..<N).toSeq
-  r=newSeq[int](N)
+  r=newSeq[int](N) #Union by Rankのrank
+  #s=1.repeat(N)
 proc root(i:int):int=
   if p[i]==i: return i
   else: p[i]=root(p[i]); return p[i]
-proc union(u,v:int)=
+proc unite(u,v:int)=
   let
     ru=root(u)
     rv=root(v)
   if ru==rv: return
   else:
-    if r[ru]<r[rv]: p[ru]=rv
+    if r[ru]<r[rv]: p[ru]=rv#; s[rv]+=s[ru]
     else:
-      p[rv]=ru
+      p[rv]=ru#; s[ru]+=s[rv]
       if r[ru]==r[rv]: r[ru]+=1
 for _ in 1..M:
   let u,v=nextInt()-1
-  union(u,v)
+  unite(u,v)
 
 include atcoder/extra/structure/weighted_union_find
 var s=initWeightedUnionFind[int](N)

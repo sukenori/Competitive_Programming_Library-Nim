@@ -12,6 +12,7 @@ var s=LazySegTree.getType(S,F,op,e,mapping,composition,id).init(n)
 
 s[i]=x
 
+s[p]
 s[l..<r]
 
 s.apply(l..<r,f)
