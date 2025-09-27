@@ -1,5 +1,5 @@
 import atcoder/extra/math/eratosthenes
-
+(n=N.float.sqrt.int)
 let e=initEratosthenes(n)
 
 e.prime
