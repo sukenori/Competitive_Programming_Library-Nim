@@ -12,12 +12,11 @@ var i=0; while n>0: a[i]=n mod b; n=n div b; i+=1
 for n in (0..<N).toSeq.repeat(K).product.mapIt(it.join).sorted:
   echo n
 
-var
-  n=0.repeat(K)
-  i=1
-while i<=K:
-  if i==1: echo n
-  n[^i]+=1
-  if n[^i]==N:
-    n[^i]=0; i+=1 
-  else: i=1
+var n=0.repeat(K)
+while true:
+  echo n
+  var i=1; n[^i]+=1
+  while n[^i]==N:
+    n[^i]=0; i+=1
+    if i>K: break else: n[^i]+=1
+  if i>K: break
