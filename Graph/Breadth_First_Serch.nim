@@ -4,8 +4,8 @@ var
   d=false.repeat(N)
 d[0]=true
 while q.len>0:
-  let i=q.popFirst
-  for j in g[i]:
-    if not d[j.t]:
-      d[j.t]=true
-      q.addLast(j.t)
+  let u=q.popFirst
+  for v in g[u]:
+    if not d[v.t]:
+      d[v.t]=true
+      q.addLast(v.t)

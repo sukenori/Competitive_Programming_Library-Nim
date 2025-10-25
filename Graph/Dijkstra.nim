@@ -1,14 +1,14 @@
 import heapqueue
 var
-  q=[(w:0,i:0)].toHeapQueue
+  q=[(w:0,n:0)].toHeapQueue
   w=int.inf.repeat(N)
   d=false.repeat(N)
 w[0]=0
 while q.len>0:
-  let i=q.pop
-  if not d[i.i]:
-    d[i.i]=true
-    for j in g[i.i]:
-      let nw=i.w+j.w
-      if nw<w[j.t]: w[j.t]=nw; q.push((nw,j.t))
-#echo w[^1]
+  let u=q.pop
+  if not d[u.n]:
+    d[u.n]=true
+    for v in g[u.n]:
+      let nw=u.w+v.w
+      if nw<w[v.t]: w[v.t]=nw; q.push((nw,v.t))
+echo w[^1]
