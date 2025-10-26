@@ -3,7 +3,7 @@ proc merge(u,v:DP):DP=(if u.d>=v.d:u else:v) #各隣接部分木全体の情報�
 proc move(u:DP):DP=(u.d+1,) #自身から子への辺移動
 proc e(u:int):DP=(0,) #mergeに対する単位元
 var
-  dp=newSeq[seq[DP]](N) #dp[u][i]は頂点uでのg[u][i]を根とする部分木におけるDP値
+  dp=newSeq[seq[DP]](N) #dp[u][i]は頂点uにおけるg[u][i]を根とする部分木におけるDP値
   a=newSeq[DP](N) #各頂点を根としたときの木全体に対するDP値
 proc dfs(p,u:int):DP=
   dp[u]=newSeq[DP](g[u].len)
