@@ -3,8 +3,8 @@ let s=(@[0]&A).cumsummed
 var
   r=1
   a=0
-for l in 0..<N-1:
-  while r<N and s[r+1]-s[l]<=M: r+=1
+for l in 0..<N:
+  while r<N and s[r]-s[l]<=M: r+=1
   a.max=r-l
 echo a
 

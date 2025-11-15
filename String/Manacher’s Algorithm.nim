@@ -1,3 +1,4 @@
+#最長回文半径を求める
 proc m(s:string):seq[int] =
   let
     t=s.join("#")

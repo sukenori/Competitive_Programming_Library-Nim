@@ -12,3 +12,5 @@ while q.len>0:
       let nw=u.w+v.w
       if nw<w[v.t]: w[v.t]=nw; q.push((nw,v.t))
 echo w[^1]
+
+#01-BFSはBFSに記載
