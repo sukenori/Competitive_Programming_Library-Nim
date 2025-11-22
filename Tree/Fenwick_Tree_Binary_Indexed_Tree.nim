@@ -3,7 +3,8 @@ var f=initFenwickTree[int](N)
 
 f.add(i,x)
 
-f[l..<r]
+f[l..<r] # [l,r)
+f[l..r] # [l,r]
 
 
 var f=newSeqWith(N+1,0)
