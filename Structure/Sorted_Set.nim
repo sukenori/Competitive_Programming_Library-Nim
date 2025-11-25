@@ -3,7 +3,7 @@ type
   SortedSetIt[T] {.importcpp:"std::set<'*0>::const_iterator",header:"<set>"}=object
   SortedSetRevIt[T] {.importcpp:"std::set<'*0>::const_reverse_iterator",header:"<set>"}=object
 #コンストラクタ
-proc initSoretdSet[T]():SortedSet[T] {.importcpp:"std::set<'*0>()"}
+proc initSortedSet[T]():SortedSet[T] {.importcpp:"std::set<'*0>()"}
 
 #イテレータ操作
 template defIt(TIt:typedesc)=
