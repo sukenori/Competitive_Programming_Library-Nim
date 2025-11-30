@@ -8,7 +8,16 @@ let s=A.initCumulativeSum2D
 s[si..ei,sj..ej]
 #s[si..si,sj..sj]=A[si][sj] 
 
+var c=initCumulativeSum2D[int](H,W)
+c.add(h,w,1)
+cs.build()
+#imosであれば c[0..h,0..w]
+
 for i in 0..<H:
   for j in 0..<W:
     if i>0: A[i][j]+=A[i-1][j]-(if j>0: A[i-1][j-1] else: 0)
     if j>0: A[i][j]+=A[i][j-1]
+
+for i in 1..2000:
+  for j in 1..2000:
+    s[i][j]=s[i-1][j]+s[i][j-1]-s[i-1][j-1]+A[i][j]
