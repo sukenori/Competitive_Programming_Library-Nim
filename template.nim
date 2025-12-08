@@ -25,3 +25,4 @@ proc `|=`[T](x:var T,y:T):void=x=x or y
 proc `^=`[T](x:var T,y:T):void=x=x xor y
 proc `<<=`[T](x:var T,y:int):void=x=x shl y
 proc `>>=`[T](x:var T,y:int):void=x=x shr y
+if ~false: echo "Yes"
