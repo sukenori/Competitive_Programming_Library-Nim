@@ -1,7 +1,7 @@
 {.warning[UnusedImport]:off.}
-import math,lenientops,strutils,re,strformat,parseutils,sequtils,algorithm,sets,tables,deques,heapqueue,macros,bitops,rationals,random,sugar,atcoder
-template inf(T:typedesc[int]):int=10**18
-template inf(T:typedesc[float]):float=1e18
+import math, lenientops, strutils, re, strformat, parseutils, sequtils, algorithm, sets, tables, deques, heapqueue, macros, bitops, rationals, random, sugar
+template inf(T: typedesc[int]): int = 10**18
+template inf(T: typedesc[float]): float = 1e18
 template ceilDiv[T:SomeSignedInt](a,b:T):int= -floorDiv(-a,b)
 func `///`[T](n,d:T):Rational[T]=initRational(n,d)
 macro defineOperators(opSets:untyped):untyped=
@@ -19,18 +19,6 @@ template `~`(x:bool):bool=not x
 template `~`(x:int):int=not x
 template `~=`(x:var bool):void=x=not x
 template `~=`(x:var int):void=x=not x
-template `=-`(lhs,rhs:untyped)=
-  lhs = -rhs
-template `=@`(lhs,rhs:untyped)=
-  lhs = @rhs
-template `:=`(lhs,rhs:untyped)=
-  var lhs = rhs
-template `:=-`(lhs,rhs:untyped)=
-  var lhs = -rhs
-template `:=@`(lhs,rhs:untyped)=
-  var lhs = @rhs
-template `==-`(x,y:int):bool=x == -y
-template `==@`[n,T](x:seq[T],y:array[n,T]):bool=x == @y
 proc `<`[T](a,b:openArray[T]):bool=
   for i in 0..<min(a.len,b.len):
     if a[i]<b[i]: return true
@@ -47,7 +35,7 @@ proc validChar():cint {.inline.}=
   while result in {8..13, 32}: result=getcharUnlocked()
 proc input(x:var int){.inline.}=
   var c=validChar(); var s=1
-  if c==45: s=-1; c=getcharUnlocked()
+  if c==45: s = -1; c=getcharUnlocked()
   x=0
   while c in 48..57: x=x*10+(c-48); c=getcharUnlocked()
   x*=s
@@ -78,7 +66,7 @@ macro input(t:tuple):untyped=
 template echo(v:float)=echo(fmt"{v:.20f}")
 type InitSeq=object
 const Seq=InitSeq()
-template makeSeq[T](len:int;init:T):auto=newSeqWith(len,init)
+template makeSeqT:auto=newSeqWith(len,init)
 template makeSeq(len:int;init:typedesc):auto=newSeq[init](len)
 macro `[]`(s:InitSeq;args:varargs[untyped]):untyped=
   if args.len==1 and args[0].kind!=nnkExprColonExpr:

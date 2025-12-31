@@ -1,7 +1,7 @@
 import random
 randomize()
 let
-  m=2^61-1
+  m=1 shl 61-1
   b=rand(m-1)
 
 proc h(s:string):int=
