@@ -371,24 +371,29 @@ when not declared(Library_Implicit_Treap):
     let merged_l = mergeTreap(self.op, self.idOp, self.comp, self.idComp, self.map, ll_part, target)
     self.root = mergeTreap(self.op, self.idOp, self.comp, self.idComp, self.map, merged_l, r_part)
   
-  proc `[]`[V, S, L](self: var ImplicitTreap[V, S, L], i: int): auto =
-    var (l_part, r_part) = splitByIndex(self.root, self.op, self.idOp, self.comp, self.idComp, self.map, i + 1)
-    var (ll_part, target) = splitByIndex(l_part, self.op, self.idOp, self.comp, self.idComp, self.map, i)
+  proc `[]`[V, S, L](self: ImplicitTreap[V, S, L], i: int): auto =
+    var mutableSelf = self.mutable
+    var (l_part, r_part) = splitByIndex(mutableSelf.root, mutableSelf.op, mutableSelf.idOp, mutableSelf.comp, mutableSelf.idComp, mutableSelf.map, i + 1)
+    var (ll_part, target) = splitByIndex(l_part, mutableSelf.op, mutableSelf.idOp, mutableSelf.comp, mutableSelf.idComp, mutableSelf.map, i)
     result = target.val.toUnAutoVal
-    let merged_l = mergeTreap(self.op, self.idOp, self.comp, self.idComp, self.map, ll_part, target)
-    self.root = mergeTreap(self.op, self.idOp, self.comp, self.idComp, self.map, merged_l, r_part)
-  proc `[]`[V, S, L](self: var ImplicitTreap[V, S, L], i: BackwardsIndex): auto =
-    return self[self.len - int(i)]
-  iterator items[V, S, L](self: var ImplicitTreap[V, S, L]): auto =
-    for i in 0 ..< self.len:
-      yield self[i]
-  proc toSeq[V, S, L](self: var ImplicitTreap[V, S, L]): auto =
-    type T = typeof(self.root.val.toUnAutoVal)
-    result = newSeqOfCap[T](self.len)
-    for i in 0 ..< self.len:
-      result.add(self[i])
-  proc `$`[V, S, L](self: var ImplicitTreap[V, S, L]): string =
-    return $(self.toSeq())
+    let merged_l = mergeTreap(mutableSelf.op, mutableSelf.idOp, mutableSelf.comp, mutableSelf.idComp, mutableSelf.map, ll_part, target)
+    mutableSelf.root = mergeTreap(mutableSelf.op, mutableSelf.idOp, mutableSelf.comp, mutableSelf.idComp, mutableSelf.map, merged_l, r_part)
+  proc `[]`[V, S, L](self: ImplicitTreap[V, S, L], i: BackwardsIndex): auto =
+    var mutableSelf = self.mutable
+    return mutableSelf[mutableSelf.len - int(i)]
+  iterator items[V, S, L](self: ImplicitTreap[V, S, L]): auto =
+    var mutableSelf = self.mutable
+    for i in 0 ..< mutableSelf.len:
+      yield mutableSelf[i]
+  proc toSeq[V, S, L](self: ImplicitTreap[V, S, L]): auto =
+    var mutableSelf = self.mutable
+    type T = typeof(mutableSelf.root.val.toUnAutoVal)
+    result = newSeqOfCap[T](mutableSelf.len)
+    for i in 0 ..< mutableSelf.len:
+      result.add(mutableSelf[i])
+  proc `$`[V, S, L](self: ImplicitTreap[V, S, L]): string =
+    var mutableSelf = self.mutable
+    return $(mutableSelf.toSeq())
   proc toImplicitTreap[V, S, L](
       self: var ImplicitTreap[V, S, L],
       arr: openArray[V]
@@ -401,7 +406,6 @@ when not declared(Library_Implicit_Treap):
       mid = n div 2
       l_root = toImplicitTreap(self, arr[0 ..< mid])
       r_root = toImplicitTreap(self, arr[mid ..^ 1])
-    
     return mergeTreap(self.op, self.idOp, self.comp, self.idComp, self.map, l_root, r_root)
 
   proc `==`[V, S, L](a, b: var ImplicitTreap[V, S, L]): bool =
@@ -548,16 +552,20 @@ when not declared(Library_Implicit_Treap):
     result.root = result.toImplicitTreap(arr)
 
   proc addFirst[T, S, L](self: var ImplicitTreap[AutoVal[T], S, L], v: T) =
-    self.insertByIndex(0, v.toAutoVal)
+    let newNode = self.createNode(v.toAutoVal)
+    self.root = mergeTreap(self.op, self.idOp, self.comp, self.idComp, self.map, newNode, self.root)
   proc addLast[T, S, L](self: var ImplicitTreap[AutoVal[T], S, L], v: T) =
-    self.insertByIndex(self.len, v.toAutoVal)
+    let newNode = self.createNode(v.toAutoVal)
+    self.root = mergeTreap(self.op, self.idOp, self.comp, self.idComp, self.map, self.root, newNode)
   proc popFirst[T, S, L](self: var ImplicitTreap[AutoVal[T], S, L]): T {.discardable.} =
     result = self[0]
-    self.deleteByIndex(0)
+    var (l, r) = splitByIndex(self.root, self.op, self.idOp, self.comp, self.idComp, self.map, 1)
+    self.root = r
   proc popLast[T, S, L](self: var ImplicitTreap[AutoVal[T], S, L]): T {.discardable.} =
-    let i = self.len - 1
-    result = self[i]
-    self.deleteByIndex(i)
+    let n = self.len
+    result = self[n - 1]
+    var (l, r) = splitByIndex(self.root, self.op, self.idOp, self.comp, self.idComp, self.map, n - 1)
+    self.root = l
   proc peekFirst[T, S, L](self: var ImplicitTreap[AutoVal[T], S, L]): T =
     return self[0]
   proc peekLast[T, S, L](self: var ImplicitTreap[AutoVal[T], S, L]): T =
@@ -629,7 +637,7 @@ when not declared(Library_Implicit_Treap):
     OpIntersection = object
     OpDifference = object
     OpSymmetricDifference = object
-  proc setOpSeqRaw[T, OpTag](a, b: seq[T], isMulti: static[bool]): seq[T] =
+  proc setOpSeqRaw[T, OpTag](a, b: seq[T], isMulti: bool): seq[T] =
     var
       i = 0
       j = 0
@@ -650,7 +658,7 @@ when not declared(Library_Implicit_Treap):
       else:
         when OpTag is OpUnion:
           result.add(a[i])
-          when isMulti: result.add(b[j])
+          if isMulti: result.add(b[j])
         elif OpTag is OpIntersection:
           result.add(a[i])
         i += 1

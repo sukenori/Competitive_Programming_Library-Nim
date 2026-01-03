@@ -1,7 +1,7 @@
 when not declared(Library_Template):
   const Library_Template = true
   {.warning[UnusedImport]: off.}
-  import math, lenientops, strutils, re, strformat, parseutils, sequtils, algorithm, sets, tables, deques, heapqueue, macros, bitops, rationals, random, sugar
+  import math, lenientops, strutils, re, strformat, parseutils, sequtils, algorithm, sets, tables, deques, heapqueue, options, macros, bitops, rationals, random, sugar
 
   randomize()
 
@@ -21,15 +21,18 @@ when not declared(Library_Template):
   template `//=`(x: var int, y: int): void = x = x div y
   template `%=`(x: var int, y: int): void = x = x mod y
   template `**=`(x: var int, y: int): void = x = x ^ y
-  template `>>=`(x: var int, y: int): void = x = x shr x
-  template `<<=`(x: var int, y: int): void = x = x shl x
-  template `&=`(x: var int, y: int): void = x = x and x
-  template `|=`(x: var int, y: int): void = x = x or x
+  template `>>=`(x: var int, y: int): void = x = x shr y
+  template `<<=`(x: var int, y: int): void = x = x shl y
+  template `&=`(x: var int, y: int): void = x = x and y
+  template `|=`(x: var int, y: int): void = x = x or y
   template `~=`(x: var int): void = x = not x
 
   func `///`[T](n, d: T): Rational[T] = initRational(n, d)
 
-  proc `[]`(x: int,i: int): int = x shr i and 1
+  proc `[]`(x, i: int): int = x shr i and 1
+  proc `[]=`(x: var int, i, y: int): void =
+    if y == 1: x = x or (1 shl i)
+    elif y == 0: x = x and not (1 shl i)
 
   converter intToBool(x: int) : bool = x != 0
 
@@ -47,13 +50,13 @@ when not declared(Library_Template):
       nx = (x + n div x) div 2
     return x
 
-  proc chmax[T](a: var T, b: T): bool {.discardable, inline.} =
+  proc chMax[T](a: var T, b: T): bool {.discardable, inline.} =
     if a < b:
       a = b
       return true
     else:
       return false
-  proc chmin[T](a: var T, b: T): bool {.discardable, inline.} =
+  proc chMin[T](a: var T, b: T): bool {.discardable, inline.} =
     if a > b:
       a = b
       return true
@@ -219,4 +222,5 @@ when not declared(Library_Template):
     result = quote do:
       for `i` in 0 ..< `len`: `body`
 
-  template echo(v: float) = echo(fmt "{v: .20f}")
+  template echo(v: float) =
+    echo v.formatFloat(ffDecimal, 20)
