@@ -438,6 +438,8 @@ when not declared(Library_Implicit_Treap):
       let idx = self.lowerBound(valNode)
       if idx >= self.len: return false
       return self[idx] == valNode.toUnAutoVal
+  proc clear[V, S, L](self: var ImplicitTreap[V, S, L]) =
+    self.root = nil
 
   type
     list[T] = ImplicitTreap[AutoVal[T], LazyState[AffineMap[T]], AffineMap[T]]

@@ -21,10 +21,11 @@ defIt(SortedMultiSetRevIt)
 
 #メソッド
 proc insert[T](s:var SortedMultiSet[T],v:T) {.importcpp:"#.insert(@)"}
-proc erase[T](s:var SortedMultiSet[T],v:T):int {.importcpp:"#.erase(@)"} #
+proc erase[T](s:var SortedMultiSet[T],v:T):int {.importcpp:"#.erase(@)"}
 proc size[T](s:SortedMultiSet[T]):int {.importcpp:"#.size()"}
 proc count[T](s:SortedMultiSet[T],v:T):int {.importcpp:"#.count(@)"}
 proc empty[T](s:SortedMultiSet[T]):bool {.importcpp:"#.empty()"}
 proc find[T](s:SortedMultiSet[T],v:T):SortedMultiSetIt[T] {.importcpp: "#.find(@)"}
 proc lower_bound[T](s:SortedMultiSet[T],v:T):SortedMultiSetIt[T] {.importcpp: "#.lower_bound(@)"}
 proc upper_bound[T](s:SortedMultiSet[T],v:T):SortedMultiSetIt[T] {.importcpp: "#.upper_bound(@)"}
+proc clear[T](s:SortedMultiSet[T]) {.importcpp:"#.clear()"}
