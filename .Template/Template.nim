@@ -140,6 +140,42 @@ when not declared(LIBRARY_TEMPLATE):
         if (pred):
           it
 
+  ##- **seq[T].maxIt(expr)**: T
+  ##    - s の要素のうち、keyExpr（itを使って書く）を最大化する要素を返す
+  template maxIt*[T](s: openArray[T], keyExpr: untyped): T =
+    var best = s[0]
+    var bestKey = block:
+      let it {.inject.} = best
+      keyExpr
+    for i in 1 ..< s.len:
+      let cand = s[i]
+      let candKey = block:
+        let it {.inject.} = cand
+        keyExpr
+      if candKey > bestKey:
+        best = cand
+        bestKey = candKey
+    best
+  ##- **seq[T].minIt(expr)**: T
+  ##    - s の要素のうち、keyExpr（itを使って書く）を最小化する要素を返す
+  template minIt*[T](s: openArray[T], keyExpr: untyped): T =
+    var best = s[0]
+    var bestKey = block:
+      let it {.inject.} = best
+      keyExpr
+    for i in 1 ..< s.len:
+      let cand = s[i]
+      let candKey = block:
+        let it {.inject.} = cand
+        keyExpr
+      if candKey < bestKey:
+        best = cand
+        bestKey = candKey
+    best
+
+  template calcIdx*(len: int, i: int): int = i
+  template calcIdx*(len: int, i: BackwardsIndex): int = len - int(i)
+
   ##- **iterator items(HSlice[int, int], step: int)**: int
   ##    - スライスをstep幅で反復。上昇・下降を自動判定
   func getIdx*(i: BackwardsIndex, len: int): int {.inline.} =
@@ -299,17 +335,23 @@ when not declared(LIBRARY_TEMPLATE):
           for i, idx in indices: res[i] = a[idx]
           yield res
 
-  proc replaceBreak(node: NimNode, labelSym: NimNode): NimNode =
-    if node.kind == nnkBreakStmt and node[0].kind == nnkEmpty:
-      return newTree(nnkBreakStmt, labelSym)
-    if node.kind in {nnkForStmt, nnkWhileStmt, nnkBlockStmt}:
-      return node
-    result = copyNimNode(node)
-    for child in node:
-      result.add replaceBreak(child, labelSym)
+  proc replaceBreak*(n: NimNode, label: NimNode): NimNode =
+    if n.kind in {nnkForStmt, nnkWhileStmt}:
+      return n
+    if n.kind == nnkBreakStmt and (n.len == 0 or n[0].kind == nnkEmpty):
+      return newTree(nnkBreakStmt, label)
+    result = copyNimNode(n)
+    for child in n:
+      result.add(replaceBreak(child, label))
   ##- **forElse(i, range, body)**
   ##    - forElseループが正常に終了したときだけElse節を実行
-  macro forElse(i, s, body: untyped): untyped =
+  macro forElse*(loopExpr: untyped, body: untyped): untyped =
+    var i, s: NimNode
+    if loopExpr.kind == nnkInfix and loopExpr[0].eqIdent("in"):
+      i = loopExpr[1]
+      s = loopExpr[2]
+    else:
+      error("Syntax error. Expected: forElse i in range:", loopExpr)
     var loopBody = newStmtList()
     var elseBody = newStmtList()
     var foundElse = false
@@ -333,8 +375,8 @@ when not declared(LIBRARY_TEMPLATE):
 
   ##- **loop(n)**
   ##    - n回の繰り返し処理
-  template loop(n: int, body: untyped) =
-    for _ in 1 .. n:
+  template loop(loopCnt: int, body: untyped) =
+    for _ in 1 .. loopCnt:
       body
 
   ##- **query(count)**
