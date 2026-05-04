@@ -551,10 +551,7 @@ when not declared(LIBRARY_TEMPLATE):
       let prefix = if label.len > 0: label & " = " else: "\x1b[31m[DUMP]\x1b[0m "
       stderr.writeLine(prefix & $x)
     return x
+
   template dump*(x: untyped): untyped =
-    block:
-      let val = x
-      when defined(debug):
-        debugPassThrough(val, astToStr(x))
-      else:
-        val
+    when defined(debug):
+      debugPassThrough(x, astToStr(x))
