@@ -18,7 +18,7 @@ when not declared(LIBRARY_TEMPLATE):
   ##- **char@('a')**
   ##    - 'a' からの0-index相対値
   proc `@`(x: char, a = 'a'): int = x.ord - a.ord
-  proc parseInt(x: char): int = ($x).parseInt
+  proc parseInt(x: char): int = x.ord - '0'.ord
 
   template ceilDiv[T: SomeSignedInt](a, b: T): int =
     -floorDiv(-a, b)
